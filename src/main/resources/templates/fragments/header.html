@@ -1,0 +1,38 @@
+<div class="header" th:fragment="header">
+    <div class="container">
+        <nav class="navbar navbar-expand-lg navbar-dark bg-dark rounded">
+            <a class="navbar-brand" th:href="@{/page/1}"><i class="fas fa-calendar-alt"></i> Time Keeping/Time Sheets</a>
+            <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbar"
+                    aria-controls="navbar" aria-expanded="false" aria-label="Toggle navigation">
+                <span class="navbar-toggler-icon"></span>
+            </button>
+
+            <div class="collapse navbar-collapse" id="navbar">
+                <ul class="navbar-nav mr-auto">
+                    <li class="nav-item">
+                        <a class="nav-link" th:href="@{/find-all/page/1}">Find All</a>
+                    </li>
+                    <li class="nav-item dropdown">
+                        <a class="nav-link dropdown-toggle" href="#" id="itemdropdown" data-toggle="dropdown"
+                           aria-haspopup="true" aria-expanded="false">Add Entry</a>
+                        <div class="dropdown-menu" aria-labelledby="itemdropdown">
+                            <a class="dropdown-item" th:href="@{/add-new-entry}">Add new Time Entry</a>
+                            <a class="dropdown-item" th:href="@{/add-public-holiday}">Add Public Holiday</a>
+                            <a class="dropdown-item" th:href="@{/add-holiday}">Add an all day Holiday</a>
+                        </div>
+                    </li>
+                </ul>
+                <ul class="navbar-nav">
+                    <li class="nav-item dropdown">
+                        <a class="nav-link dropdown-toggle" href="#" id="dropdown" data-toggle="dropdown"
+                           aria-haspopup="true" aria-expanded="false"><i class="far fa-user"> <span sec:authentication="name"></span></i></a>
+                        <div class="dropdown-menu" aria-labelledby="dropdown">
+                            <a class="dropdown-item" th:href="@{/profile/change-password}">Change Password</a>
+                            <a class="dropdown-item" href="/logout">Logout</a>
+                        </div>
+                    </li>
+                </ul>
+            </div>
+        </nav>
+    </div>
+</div>

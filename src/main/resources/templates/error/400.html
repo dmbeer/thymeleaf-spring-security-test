@@ -1,0 +1,34 @@
+<html lang="en"
+      xmlns:th="http://www.thymeleaf.org"
+      xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout"
+      layout:decorator="layouts/error-layout">
+<body>
+<div id="page" layout:fragment="error">
+    <div class="container">
+        <div class="row">
+            <div class="col-2">
+                <i class="fas fa-exclamation-triangle fa-7x"></i>
+            </div>
+            <div class="col-8">
+                <h1>Error Processing Request</h1>
+
+                <p>Looks Like something went wrong processing your request. The error has been reported.</p>
+
+                <p>It would be useful if you could send us an <a href="">email</a> explaining
+                what caused the error.</p>
+
+                <h2>What To do next</h2>
+
+                <p>Please check that the URL is correct. If a link please copy and paste the link to make sure the whole
+                link is used.</p>
+
+                <p>You can Either return to the <a th:href="@{/page/1}">home</a> page.
+
+                <h2>Thank you for your patience.</h2>
+            </div>
+            <div class="col-2"><span></span></div>
+        </div>
+    </div>
+</div>
+</body>
+</html>
