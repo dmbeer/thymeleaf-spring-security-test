@@ -7,12 +7,14 @@ import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.autoconfigure.thymeleaf.ThymeleafAutoConfiguration;
+import org.springframework.boot.test.autoconfigure.web.reactive.WebFluxTest;
 import org.springframework.boot.test.mock.mockito.MockBean;
 import org.springframework.context.ApplicationContext;
 import org.springframework.context.annotation.Import;
 import org.springframework.http.HttpHeaders;
 import org.springframework.http.MediaType;
 import org.springframework.security.test.context.annotation.SecurityTestExecutionListeners;
+import org.springframework.security.test.context.support.WithMockUser;
 import org.springframework.security.web.server.context.SecurityContextServerWebExchangeWebFilter;
 import org.springframework.test.context.ContextConfiguration;
 import org.springframework.test.context.junit4.SpringRunner;
@@ -21,6 +23,7 @@ import org.springframework.test.web.reactive.server.WebTestClient;
 import org.springframework.util.LinkedMultiValueMap;
 import org.springframework.util.MultiValueMap;
 import org.springframework.web.reactive.function.BodyInserters;
+import org.thymeleaf.spring5.view.ThymeleafViewResolver;
 
 import java.util.Arrays;
 import java.util.Collections;
@@ -35,6 +38,8 @@ import static org.springframework.security.test.web.reactive.server.SecurityMock
 
 @RunWith(SpringRunner.class)
 @Import({ThymeleafAutoConfiguration.class})
+@WebFluxTest
+@WithMockUser(username = "test", authorities = {"ROLE_ADMIN"})
 @ContextConfiguration(classes = ThymeleafSpringSecurityTestApplication.class)
 public class ChangePasswordControllerTest {
 
