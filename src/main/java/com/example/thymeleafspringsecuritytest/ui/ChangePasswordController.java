@@ -42,7 +42,7 @@ public class ChangePasswordController {
             }
         });
         if (password1.equals(password2)) {
-            return userDetailsRepository.updatePassword(((UserDetails) authentication.getPrincipal()).getUsername(), password2).log("Created Data").then(Mono.just("redirect:/page/1")).log("Finished");
+            return userDetailsRepository.updatePassword(((UserDetails) authentication.getPrincipal()).getUsername(), password2).log("Created Data").then(Mono.just("redirect:/profile/change-password")).log("Finished");
         } else {
             return Mono.just("/profile/change-password");
         }

@@ -5,6 +5,8 @@ import com.example.thymeleafspringsecuritytest.security.SpringUserDetailsReposit
 import org.junit.Before;
 import org.junit.Test;
 import org.junit.runner.RunWith;
+import org.mockito.ArgumentCaptor;
+import org.mockito.Captor;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.autoconfigure.thymeleaf.ThymeleafAutoConfiguration;
 import org.springframework.boot.test.autoconfigure.web.reactive.WebFluxTest;
@@ -24,6 +26,7 @@ import org.springframework.util.LinkedMultiValueMap;
 import org.springframework.util.MultiValueMap;
 import org.springframework.web.reactive.function.BodyInserters;
 import org.thymeleaf.spring5.view.ThymeleafViewResolver;
+import reactor.core.publisher.Mono;
 
 import java.util.Arrays;
 import java.util.Collections;
@@ -32,13 +35,15 @@ import static org.hamcrest.MatcherAssert.assertThat;
 import static org.hamcrest.Matchers.stringContainsInOrder;
 import static org.junit.Assert.*;
 import static org.mockito.ArgumentMatchers.any;
+import static org.mockito.BDDMockito.given;
 import static org.mockito.Mockito.doNothing;
+import static org.mockito.Mockito.verify;
 import static org.springframework.security.test.web.reactive.server.SecurityMockServerConfigurers.csrf;
 import static org.springframework.security.test.web.reactive.server.SecurityMockServerConfigurers.springSecurity;
 
 @RunWith(SpringRunner.class)
 @Import({ThymeleafAutoConfiguration.class})
-@WebFluxTest
+@WebFluxTest(controllers = ChangePasswordController.class)
 @WithMockUser(username = "test", authorities = {"ROLE_ADMIN"})
 @ContextConfiguration(classes = ThymeleafSpringSecurityTestApplication.class)
 public class ChangePasswordControllerTest {
@@ -51,13 +56,15 @@ public class ChangePasswordControllerTest {
     @MockBean
     SpringUserDetailsRepository userDetailsRepository;
 
+    @Captor
+    private ArgumentCaptor<String> captor;
+
     @Before
     public void setUp() throws Exception {
-        webTestClient = WebTestClient.bindToController(new ChangePasswordController(userDetailsRepository))
+        webTestClient = WebTestClient.bindToApplicationContext(context)
                 .webFilter(new SecurityContextServerWebExchangeWebFilter())
                 .apply(springSecurity())
                 .configureClient()
-                .defaultHeader(HttpHeaders.ACCEPT, MediaType.APPLICATION_JSON_VALUE)
                 .build();
     }
 
@@ -79,12 +86,12 @@ public class ChangePasswordControllerTest {
         formData.put("password1", Collections.singletonList("password"));
         formData.put("password2", Collections.singletonList("password"));
 
-//        given(userDetailsRepository.updatePassword(any(), any())).willReturn(Mono.empty());
+        given(userDetailsRepository.updatePassword(any(), any())).willReturn(Mono.empty());
 
-        webTestClient.mutateWith(csrf()).post().uri("/profile/change-password").contentType(MediaType.APPLICATION_FORM_URLENCODED)
-                .body(BodyInserters.fromFormData(formData)).exchange().expectStatus().isSeeOther().expectHeader().valueEquals(HttpHeaders.LOCATION, "/page/1");
+        webTestClient.mutateWith(csrf()).post().uri("/profile/change-password").contentType(MediaType.APPLICATION_FORM_URLENCODED).accept(MediaType.APPLICATION_JSON)
+                .body(BodyInserters.fromFormData(formData)).exchange().expectStatus().isSeeOther().expectHeader().valueEquals(HttpHeaders.LOCATION, "/profile/change-password");
 
-//        verify(userDetailsRepository).updatePassword(captor.capture(), captor.capture());
-        doNothing().when(userDetailsRepository).updatePassword(any(), any());
+        verify(userDetailsRepository).updatePassword(captor.capture(), captor.capture());
+
     }
 }
